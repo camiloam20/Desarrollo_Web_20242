@@ -3,4 +3,6 @@
  
  Desarrollo de Aplicaciones Web
  
- Camilo Álvarez Muñoz Ingeniería Electrónica UdeA
+ Camilo Álvarez Muñoz 
+ 
+ Ingeniería Electrónica - UdeA
