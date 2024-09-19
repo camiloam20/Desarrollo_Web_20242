@@ -138,3 +138,13 @@ footer {
   margin-top: 2%; 
   margin-inline: 5%;
 }
+
+/* Estilos específicos para la clase de la página CSS */
+.page-css .cajas{
+  margin-top: 2%; 
+  margin-inline: 5%;
+}
+
+.page-css #css{
+  background-color: rgba(231, 0, 88, 0.582);
+}
