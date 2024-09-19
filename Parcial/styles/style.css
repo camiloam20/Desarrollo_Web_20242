@@ -132,3 +132,9 @@ footer {
   color: white;
   margin-top: auto;
 }
+
+/* Estilos específicos para la clase de la página HTML */
+.page-html .cajas{
+  margin-top: 2%; 
+  margin-inline: 5%;
+}
