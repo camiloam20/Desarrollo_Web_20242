@@ -71,6 +71,7 @@ nav ul li a {
   padding: 20px;
   text-align: right;
   position: relative;
+  box-shadow: -5px -5px 5px rgba(255, 255, 255, 0.9);
   min-height: 50px;
   background-clip: border-box;
   transition: box-shadow 0.3s;
@@ -91,7 +92,6 @@ nav ul li a {
 #html { 
   background-color: rgba(183, 0, 255, 0.863);
   border-bottom: 8px solid rgb(255, 0, 255);
-  box-shadow: -5px -5px 5px rgba(255, 255, 255, 0.9);
   align-self: center;
   grid-column: 2;
   grid-row: 1;
@@ -100,7 +100,6 @@ nav ul li a {
 #css { 
   background-color: rgba(0, 225, 255, 0.582);
   border-bottom: 8px solid rgb(45, 45, 212);
-  box-shadow: -5px -5px 5px rgba(255, 255, 255, 0.9);
   align-self: top;
   grid-column: 2;
   grid-row: 2;
@@ -109,7 +108,6 @@ nav ul li a {
 #dns {
   background-color: rgba(133, 133, 133, 0.612);
   border-bottom: 8px solid rgb(255, 0, 0);
-  box-shadow: -5px -5px 5px rgba(255, 255, 255, 0.9);
   align-self: center;
   grid-column: 1;
   grid-row: 1 / span 2;
@@ -118,7 +116,6 @@ nav ul li a {
 #tcpip {
   background-color: rgba(112, 0, 62, 0.801);
   border-bottom: 8px solid rgb(0, 195, 255);
-  box-shadow: -5px -5px 5px rgba(255, 255, 255, 0.9);
   align-self: center;
   grid-column: 3;
   grid-row: 1 / span 2;
