@@ -1,0 +1,134 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: black;
+  color: white;
+  background-image: url(/images/pexels-kovyrina-937980.jpg);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  text-align: center;
+  padding: 20px;
+  background-color: transparent;
+  position: relative;
+}
+
+header h1 {
+  color: rgb(105, 105, 105);
+  text-shadow: -1px 1px 0 rgba(255, 255, 255, 0.3), 
+               -2px 2px 0 rgba(255, 255, 255, 0.3), 
+               -3px 3px 0 rgba(255, 255, 255, 0.3), 
+               -4px 4px 0 rgba(255, 255, 255, 0.3),
+               -5px 5px 15px rgba(255, 255, 255, 0.3);
+}
+
+header h2 {
+  color: red;
+  font-size: medium;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: left;
+  padding: 1em;
+  margin-left: 1%;
+  margin-right: 1%;
+  background-color: #002fff91;
+}
+
+nav ul li {
+  margin: 0 15px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-gap: 10px;
+  padding: 1%;
+  flex: 1;
+}
+
+.cajas {
+  padding: 20px;
+  text-align: right;
+  position: relative;
+  min-height: 50px;
+  background-clip: border-box;
+  transition: box-shadow 0.3s;
+}
+
+.cajas img {
+  bottom: 10px;
+  left: 10px;
+  width: 40px;
+  height: auto;
+  position: absolute;
+}
+
+.cajas h2 {
+  color: rgb(255, 51, 0);
+}
+
+#html { 
+  background-color: rgba(183, 0, 255, 0.863);
+  border-bottom: 8px solid rgb(255, 0, 255);
+  box-shadow: -5px -5px 5px rgba(255, 255, 255, 0.9);
+  align-self: center;
+  grid-column: 2;
+  grid-row: 1;
+}
+
+#css { 
+  background-color: rgba(0, 225, 255, 0.582);
+  border-bottom: 8px solid rgb(45, 45, 212);
+  box-shadow: -5px -5px 5px rgba(255, 255, 255, 0.9);
+  align-self: top;
+  grid-column: 2;
+  grid-row: 2;
+}
+
+#dns {
+  background-color: rgba(133, 133, 133, 0.612);
+  border-bottom: 8px solid rgb(255, 0, 0);
+  box-shadow: -5px -5px 5px rgba(255, 255, 255, 0.9);
+  align-self: center;
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+
+#tcpip {
+  background-color: rgba(112, 0, 62, 0.801);
+  border-bottom: 8px solid rgb(0, 195, 255);
+  box-shadow: -5px -5px 5px rgba(255, 255, 255, 0.9);
+  align-self: center;
+  grid-column: 3;
+  grid-row: 1 / span 2;
+}
+
+footer {
+  text-align: center;
+  padding: 10px;
+  background-color: transparent;
+  width: 100%;
+  color: white;
+  margin-top: auto;
+}
