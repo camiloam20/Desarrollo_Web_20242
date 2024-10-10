@@ -27,32 +27,29 @@
           <section id="crear-comida">
               <h2>Crear Comida</h2>
               <form id="crear-form">
-                  <input type="text" placeholder="Nombre" required>
-                  <textarea placeholder="Descripción" required></textarea>
-                  <input type="text" placeholder="Ingredientes (separados por comas)" required>
-                  <input type="url" placeholder="URL de la imagen" required>
-                  <button type="submit">Crear Comida</button>
+                  <input id="nombrefood" type="text" placeholder="Nombre" required>
+                  <textarea id="desfood" placeholder="Descripción" required></textarea>
+                  <input id="ingfood" type="text" placeholder="Ingredientes (separados por comas)" required>
+                  <input id="urlfood" type="url" placeholder="URL de la imagen" required>
+                  <button id="Enviarcomida" type="submit">Crear Comida</button>
               </form>
           </section>
           
           <!-- Modificar Comidas -->
-          <section id="modificar-comida">
-              <h2>Modificar Comida</h2>
-              <form id="modificar-form">
-                <select id="comidas-modificar" required>
+        <section id="modificar-comida">
+          <h2>Modificar Comida</h2>
+          <form id="modificar-form">
+              <select id="comidas-modificar" required>
                   <option value="">Seleccionar comida para modificar</option>
-
               </select>
-              <button type="submit">Cargar Datos</button>
-
-                  </select>
-                  <input type="text" placeholder="Nombre" required>
-                  <textarea placeholder="Descripción" required></textarea>
-                  <input type="text" placeholder="Ingredientes (separados por comas)" required>
-                  <input type="url" placeholder="URL de la imagen" required>
-                  <button type="submit">Modificar Comida</button>
-              </form>
-          </section>
+              
+              <input id="nombrefood-mod" type="text" placeholder="Nombre" required>
+              <textarea id="desfood-mod" placeholder="Descripción" required></textarea>
+              <input id="ingfood-mod" type="text" placeholder="Ingredientes (separados por comas)" required>
+              <input id="urlfood-mod" type="url" placeholder="URL de la imagen" required>
+              <button id="Modificarcomida" type="submit">Modificar Comida</button>
+          </form>
+        </section>
       </main>
   </body>
     </main>
