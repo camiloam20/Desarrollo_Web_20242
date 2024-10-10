@@ -1,4 +1,4 @@
-import App from './modules/app.js'
+import { DOM } from './modules/dom.js';
 
-const app = ()=> new App();
+const app = () => new DOM();
 app();

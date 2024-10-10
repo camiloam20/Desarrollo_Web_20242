@@ -5,10 +5,56 @@
     <meta name="author" content="Camilo Alvarez Muñoz" />
     <meta name="description" content="Parcial 2 JavaScript" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Parcial 2 Pagina principal</title>
+    <title>Parcial 2 Página Principal</title>
 
     <link rel="stylesheet" href="/styles/styles.css" />
-    <script defer src="./main.js"></script>
-  </head> 
-  <body></body>
+    <script type="module" src="./main.js" defer></script>
+  </head>
+  <body>
+    <body>
+      <header>
+          <h1>Parcial 2 Gestion de API Comidas</h1>
+      </header>
+      <main>
+          <!-- Consultar Comidas -->
+          <section id="consultar-comidas">
+              <h2>Consultar Comidas</h2>
+              <button id="buscar-comida" type="submit">Consultar</button>
+              <section id="mostrar-comidas"> </section>
+          </section>
+  
+          <!--Crear Comida -->
+          <section id="crear-comida">
+              <h2>Crear Comida</h2>
+              <form id="crear-form">
+                  <input type="text" placeholder="Nombre" required>
+                  <textarea placeholder="Descripción" required></textarea>
+                  <input type="text" placeholder="Ingredientes (separados por comas)" required>
+                  <input type="url" placeholder="URL de la imagen" required>
+                  <button type="submit">Crear Comida</button>
+              </form>
+          </section>
+          
+          <!-- Modificar Comidas -->
+          <section id="modificar-comida">
+              <h2>Modificar Comida</h2>
+              <form id="modificar-form">
+                <select id="comidas-modificar" required>
+                  <option value="">Seleccionar comida para modificar</option>
+
+              </select>
+              <button type="submit">Cargar Datos</button>
+
+                  </select>
+                  <input type="text" placeholder="Nombre" required>
+                  <textarea placeholder="Descripción" required></textarea>
+                  <input type="text" placeholder="Ingredientes (separados por comas)" required>
+                  <input type="url" placeholder="URL de la imagen" required>
+                  <button type="submit">Modificar Comida</button>
+              </form>
+          </section>
+      </main>
+  </body>
+    </main>
+  </body>
 </html>
