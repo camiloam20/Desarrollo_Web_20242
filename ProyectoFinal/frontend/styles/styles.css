@@ -33,21 +33,21 @@ main {
 
 /* Logo */
 .logo {
-    display: inline-flex; /* Para alinear imagen y texto horizontalmente */
-    align-items: center; /* Centrar verticalmente */
+    display: inline-flex;
+    align-items: center; 
     padding: 20px;
     font-size: 28px;
     font-weight: 700;
-    color: var(--dark); /* Color oscuro para el logo */
+    color: var(--dark); 
 }
 
 /* Estilos del logo */
 .logo img {
-    width: 50px; /* Ajusta el tamaño del logo según sea necesario */
+    width: 50px; 
     height: auto;
     vertical-align: middle;
     margin-right: 10px;
-    box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.7); /* Difuminado blanco detrás */
+    box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.7);
     border-radius: 25%; 
 }
 
@@ -127,7 +127,7 @@ nav {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
     padding: 50px;
-    color: var(--light); /* Asegura color claro sobre fondo oscuro */
+    color: var(--light);
 }
 
 .feature-card {
@@ -173,9 +173,9 @@ footer {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
-    backdrop-filter: blur(5px); /* Efecto difuminado */
-    z-index: 999; /* Asegura que esté sobre otros elementos */
+    background: rgba(0, 0, 0, 0.5); 
+    backdrop-filter: blur(5px); 
+    z-index: 999; 
 }
 
 .popup-container {
@@ -183,14 +183,14 @@ footer {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: var(--gradient-2); /* Fondo de gradiente igual a nav y cta-banner */
+    background: var(--gradient-2);
     border-radius: 15px;
     padding: 20px;
     width: 90%;
     max-width: 400px;
     box-shadow: 0 15px 30px var(--shadow);
-    z-index: 1000; /* Encima del overlay */
-    color: var(--dark); /* Texto oscuro para coherencia */
+    z-index: 1000; 
+    color: var(--dark);
 }
 
 .popup-form {
@@ -201,7 +201,7 @@ footer {
 
 .popup-form h2 {
     text-align: center;
-    color: var(--dark); /* Texto oscuro */
+    color: var(--dark); 
 }
 
 .popup-form input {
@@ -215,15 +215,15 @@ footer {
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background: var(--dark); /* Fondo oscuro */
-    color: var(--light); /* Texto blanco */
+    background: var(--dark);
+    color: var(--light); 
     font-weight: bold;
     cursor: pointer;
     transition: background 0.3s;
 }
 
 .popup-form button:hover {
-    background: lighten(var(--dark), 10%); /* Aclarado al pasar el mouse */
+    background: lighten(var(--dark), 10%);
 }
 
 .popup-close {
@@ -234,7 +234,7 @@ footer {
     border: none;
     font-size: 1.2em;
     cursor: pointer;
-    color: var(--dark); /* Cerrar con icono oscuro */
+    color: var(--dark); 
 }
 
 .carousel {
@@ -249,18 +249,18 @@ footer {
 /* Estilos para la pista del carrusel */
 .carousel-track {
     display: flex;
-    gap: 10px; /* Espacio entre las imágenes */
+    gap: 10px;
     transition: transform 0.5s ease-in-out;
     padding: 10px;
 }
 
 /* Estilos para cada imagen en el carrusel */
 .carousel-image {
-    min-width: calc(100% / 3 - 10px); /* Espacio entre imágenes incluido */
+    min-width: calc(100% / 3 - 10px);
     height: auto;
     object-fit: cover;
     border-radius: 15px;
-    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.5); /* Sombra blanca */
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.5);
     transition: transform 0.3s;
 }
 
