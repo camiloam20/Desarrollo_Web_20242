@@ -1,0 +1,154 @@
+/* Variables de colores */
+:root {
+    --primary: #4b6587;
+    --primary-dark: #3a5069;
+    --secondary: #ff6b81;
+    --accent: #f7b731;
+    --dark: #2d3436;
+    --light: #ffffff;
+    --gradient-1: linear-gradient(135deg, #4b6587 0%, #3a5069 100%);
+    --gradient-2: linear-gradient(135deg, #ff6b81 0%, #f7b731 100%);
+    --gradient-bg: linear-gradient(135deg, #1e272e 0%, #2d3436 100%);
+    --glass-bg: rgba(255, 255, 255, 0.15);
+    --glass-border: rgba(255, 255, 255, 0.25);
+    --shadow: rgba(0, 0, 0, 0.15);
+}
+
+/* Estilos base y reset */
+html, body {
+    background: var(--gradient-bg);
+    color: var(--light);
+    font-family: 'Poppins', sans-serif;
+    overscroll-behavior: none;
+    overflow-x: hidden;
+}
+
+/* Fondo global en main para cubrir hero, features y cta-banner */
+main {
+    background: url("../styles/Background.jpg") center center / cover no-repeat, var(--gradient-bg);
+    color: var(--light);
+    position: relative;
+    z-index: 1;
+}
+
+/* Logo */
+.logo {
+    padding: 20px;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--dark); /* Color oscuro para el logo */
+}
+
+/* Barra de Navegación */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--gradient-2);
+    padding: 10px 20px;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+/* Botones de navegación */
+.btn-nav {
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 0.9em;
+    text-decoration: none;
+    background: var(--dark); /* Fondo oscuro */
+    color: var(--light); /* Texto blanco */
+}
+
+/* Otros botones */
+.btn-outline, .btn-primary, .btn-final, .btn-fc {
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 0.9em;
+    text-decoration: none;
+    background: var(--accent);
+    color: var(--dark);
+}
+
+/* Sección Hero */
+.hero {
+    text-align: center;
+    padding: 100px 20px;
+    min-height: 400px;
+    color: var(--light);
+    z-index: 1;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Superposición de color */
+    z-index: -1;
+}
+
+.hero h1 {
+    font-size: 3em;
+    color: var(--accent);
+}
+
+.hero p {
+    font-size: 1.2em;
+    max-width: 700px;
+    margin: 20px auto;
+}
+
+/* Sección Features */
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 50px;
+    color: var(--light); /* Asegura color claro sobre fondo oscuro */
+}
+
+.feature-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    padding: 40px 30px;
+    border-radius: 15px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px var(--shadow);
+}
+
+.feature-card i {
+    color: var(--secondary);
+}
+
+/* CTA Banner */
+.cta-banner {
+    text-align: center;
+    padding: 80px 20px;
+    background: var(--gradient-2);
+    color: var(--dark);
+    margin-top: 20px;
+}
+
+/* Footer */
+footer {
+    background: var(--primary-dark);
+    color: var(--light);
+    text-align: center;
+    padding: 5px;
+    font-size: 0.8em;
+}
