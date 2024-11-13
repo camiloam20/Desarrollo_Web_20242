@@ -25,7 +25,7 @@ html, body {
 
 /* Fondo global en main para cubrir hero, features y cta-banner */
 main {
-    background: url("../styles/Background.jpg") center center / cover no-repeat, var(--gradient-bg);
+    background: url("../images/Background.jpg") center center / cover no-repeat, var(--gradient-bg);
     color: var(--light);
     position: relative;
     z-index: 1;
@@ -33,11 +33,24 @@ main {
 
 /* Logo */
 .logo {
+    display: inline-flex; /* Para alinear imagen y texto horizontalmente */
+    align-items: center; /* Centrar verticalmente */
     padding: 20px;
     font-size: 28px;
     font-weight: 700;
     color: var(--dark); /* Color oscuro para el logo */
 }
+
+/* Estilos del logo */
+.logo img {
+    width: 50px; /* Ajusta el tamaño del logo según sea necesario */
+    height: auto;
+    vertical-align: middle;
+    margin-right: 10px;
+    box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.7); /* Difuminado blanco detrás */
+    border-radius: 25%; 
+}
+
 
 /* Barra de Navegación */
 nav {
@@ -151,4 +164,136 @@ footer {
     text-align: center;
     padding: 5px;
     font-size: 0.8em;
+}
+
+/* Fondo difuminado y centrado para el popup */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
+    backdrop-filter: blur(5px); /* Efecto difuminado */
+    z-index: 999; /* Asegura que esté sobre otros elementos */
+}
+
+.popup-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--gradient-2); /* Fondo de gradiente igual a nav y cta-banner */
+    border-radius: 15px;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 15px 30px var(--shadow);
+    z-index: 1000; /* Encima del overlay */
+    color: var(--dark); /* Texto oscuro para coherencia */
+}
+
+.popup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.popup-form h2 {
+    text-align: center;
+    color: var(--dark); /* Texto oscuro */
+}
+
+.popup-form input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.popup-form button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: var(--dark); /* Fondo oscuro */
+    color: var(--light); /* Texto blanco */
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.popup-form button:hover {
+    background: lighten(var(--dark), 10%); /* Aclarado al pasar el mouse */
+}
+
+.popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    color: var(--dark); /* Cerrar con icono oscuro */
+}
+
+.carousel {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 450px;
+    margin: 20px auto;
+    border-radius: 10px;
+}
+
+/* Estilos para la pista del carrusel */
+.carousel-track {
+    display: flex;
+    gap: 10px; /* Espacio entre las imágenes */
+    transition: transform 0.5s ease-in-out;
+    padding: 10px;
+}
+
+/* Estilos para cada imagen en el carrusel */
+.carousel-image {
+    min-width: calc(100% / 3 - 10px); /* Espacio entre imágenes incluido */
+    height: auto;
+    object-fit: cover;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.5); /* Sombra blanca */
+    transition: transform 0.3s;
+}
+
+/* Añadir efecto de zoom suave al pasar el cursor sobre la imagen */
+.carousel-image:hover {
+    transform: scale(1.05);
+}
+
+/* Estilos para los botones del carrusel */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.6);
+    border: none;
+    color: white;
+    font-size: 20px;
+    padding: 10px 15px;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.carousel-btn.prev {
+    left: 5px;
+}
+
+.carousel-btn.next {
+    right: 5px;
+}
+
+.carousel-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 }
