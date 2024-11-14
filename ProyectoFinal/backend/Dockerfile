@@ -1,20 +1,21 @@
-# Usa la imagen oficial de Node.js
-FROM node:18
+FROM node:18-alpine
 
-# Crea un directorio de trabajo
 WORKDIR /app
 
-# Copia los archivos
+# Instalar dependencias del sistema necesarias para bcrypt
+RUN apk add --no-cache make gcc g++ python3
+
+# Copiar archivos de configuración
 COPY package*.json ./
 
-# Instala las dependencias
+# Instalar dependencias
 RUN npm install
 
-# Copia el resto del código
+# Copiar el código fuente
 COPY . .
 
-# Expone el puerto
+# Exponer el puerto
 EXPOSE 3000
 
-# Comando para iniciar el servidor
-CMD ["node", "server.js"]
+# Comando para iniciar la aplicación
+CMD ["npm", "start"]

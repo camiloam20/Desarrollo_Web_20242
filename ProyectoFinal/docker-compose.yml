@@ -1,30 +1,63 @@
 version: '3.8'
 
 services:
-  db:
-    image: mysql:8
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: bookNest
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      - PORT=3000
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=password_db
+      - DB_NAME=db_booknest
+      - JWT_SECRET=your_jwt_secret
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    command: 
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-time-zone=-05:00
+    environment:
+      - MYSQL_DATABASE=db_booknest
+      - MYSQL_USER=user_db
+      - MYSQL_PASSWORD=password_db
+      - MYSQL_ROOT_PASSWORD=password_db
+      - TZ=America/Bogota 
     ports:
       - "3306:3306"
     volumes:
-      - db_data:/var/lib/mysql
-    command: --default-authentication-plugin=mysql_native_password
+    - db_data:/var/lib/mysql
+    - ./database.sql:/docker-entrypoint-initdb.d/database.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-ppassword_db"]
+      interval: 5s  
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - app-network
+    restart: unless-stopped
 
-  app:
-    build: .
-    ports:
-      - "3000:3000"
-    environment:
-      DB_HOST: db
-      DB_USER: user 
-      DB_PASSWORD: password
-      DB_DATABASE: bookNest
-    depends_on:
-      - db
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   db_data:

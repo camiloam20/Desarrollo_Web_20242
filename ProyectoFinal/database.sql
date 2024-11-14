@@ -1,6 +1,13 @@
-CREATE DATABASE library;
+-- Eliminar la base de datos si existe y crearla nuevamente
+DROP DATABASE IF EXISTS db_booknest;
+CREATE DATABASE db_booknest;
 
-USE library;
+USE db_booknest;
+
+-- Eliminar las tablas si existen (en orden inverso debido a las foreign keys)
+DROP TABLE IF EXISTS user_books;
+DROP TABLE IF EXISTS books;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -33,3 +40,8 @@ CREATE TABLE user_books (
   FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (book_id) REFERENCES books(id)
 );
+
+-- Opcional: Insertar un usuario administrador por defecto
+INSERT INTO users (full_name, email, password, birth_year, username, is_admin)
+VALUES ('Admin', 'admin@booknest.com', '$2b$10$Y97ZIAn2y0GQZGn3LejqL.E4VwD3SWZ8B4cHJaB6cIqQncih8npTi', 1990, 'admin', true);
+-- La contraseña del admin es 'admin123' (ya está hasheada en el ejemplo)
