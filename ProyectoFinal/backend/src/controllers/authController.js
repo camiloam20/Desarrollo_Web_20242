@@ -42,7 +42,8 @@ class AuthController {
       res.status(201).json({
         success: true,
         message: 'Usuario registrado exitosamente',
-        token
+        token,
+        username
       });
     } catch (error) {
       console.error('Error en registro:', error);
@@ -57,9 +58,9 @@ class AuthController {
     try {
       const { email, password } = req.body;
       
-      // Find user
+      // Find user with is_admin field
       const [users] = await pool.query(
-        'SELECT * FROM users WHERE email = ?',
+        'SELECT *, is_admin FROM users WHERE email = ?',
         [email]
       );
       
@@ -83,7 +84,7 @@ class AuthController {
       
       // Generate JWT token
       const token = jwt.sign(
-        { userId: user.id, email: user.email },
+        { userId: user.id, email: user.email, isAdmin: user.is_admin },
         process.env.JWT_SECRET,
         { expiresIn: '24h' }
       );
@@ -92,7 +93,8 @@ class AuthController {
         success: true,
         message: 'Inicio de sesión exitoso',
         token,
-        username: user.username  // Añadido el username a la respuesta
+        username: user.username,
+        isAdmin: user.is_admin === 1
       });
     } catch (error) {
       console.error('Error en login:', error);

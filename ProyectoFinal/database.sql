@@ -42,7 +42,7 @@ CREATE TABLE user_books (
   FOREIGN KEY (book_id) REFERENCES books(id)
 );
 
--- Opcional: Insertar un usuario administrador por defecto
+-- Insertar un usuario administrador por defecto
 INSERT INTO users (full_name, email, password, birth_year, username, is_admin)
-VALUES ('Admin', 'admin@booknest.com', '$2b$10$Y97ZIAn2y0GQZGn3LejqL.E4VwD3SWZ8B4cHJaB6cIqQncih8npTi', 1990, 'admin', true);
--- La contraseña del admin es 'admin123' (ya está hasheada en el ejemplo)
+VALUES ('Admin', 'admin@booknest.com', '$2b$10$ovYoWmwkLeytjyUtmMUQc.ckHfcqpkLekB7NkxlB3/v22Y3cWIlJC', 1990, 'admin', true);
+-- La contraseña del admin es 'admin123' encriptada con bcrypt

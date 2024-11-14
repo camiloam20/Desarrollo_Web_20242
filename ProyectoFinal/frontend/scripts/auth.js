@@ -43,7 +43,7 @@ function showPopup(type) {
   popup.appendChild(closeButton);
   document.body.appendChild(popup);
 
-  // Add form submission handlers
+  // Añadir manejadores de envío del formulario
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -62,16 +62,21 @@ function showPopup(type) {
       const result = await response.json();
 
       if (result.success) {
-        // Store the token and user data
+        // Almacenar el token y los datos del usuario
         localStorage.setItem('token', result.token);
-        localStorage.setItem('username', data.username || result.username);
+        localStorage.setItem('username', result.username);
+        localStorage.setItem('isAdmin', result.isAdmin || false);
         
-        // Close the popup
+        // Cerrar el popup
         overlay.remove();
         popup.remove();
         
-        // Redirect to dashboard
-        window.location.href = '/pages/dashboard.html';
+        // Redirigir basado en el rol del usuario
+        if (result.isAdmin) {
+          window.location.href = '/pages/admin.html';
+        } else {
+          window.location.href = '/pages/dashboard.html';
+        }
       } else {
         errorDiv.textContent = result.message;
         errorDiv.style.display = 'block';
@@ -83,7 +88,7 @@ function showPopup(type) {
   });
 }
 
-// Event listeners para los botones
+// Listeners para los botones
 document.querySelectorAll('#login').forEach(btn => {
   btn.addEventListener('click', () => showPopup('login'));
 });
@@ -96,14 +101,21 @@ document.querySelectorAll('#register').forEach(btn => {
 function checkAuthStatus() {
   const token = localStorage.getItem('token');
   const username = localStorage.getItem('username');
+  const isAdmin = localStorage.getItem('isAdmin') === 'true';
   const currentPath = window.location.pathname;
   
-  // Si estamos en el dashboard
-  if (currentPath.includes('dashboard.html')) {
+  // Si estamos en el dashboard o en la página de admin
+  if (currentPath.includes('dashboard.html') || currentPath.includes('admin.html')) {
     if (!token) {
       // Si no hay token, redirigir al index
       window.location.href = '/index.html';
     } else {
+      // Verificar acceso a la página de admin
+      if (currentPath.includes('admin.html') && !isAdmin) {
+        window.location.href = '/pages/dashboard.html';
+      } else if (currentPath.includes('dashboard.html') && isAdmin) {
+        window.location.href = '/pages/admin.html';
+      }
       // Si hay token, actualizar el nombre de usuario
       const usernameElement = document.getElementById('username');
       if (usernameElement) {
@@ -111,8 +123,6 @@ function checkAuthStatus() {
       }
     }
   }
-  // Si estamos en el index y hay un token, NO redirigimos automáticamente
-  // Esto permite que el index sea el punto de entrada inicial
 }
 
 // Manejar el cierre de sesión
@@ -121,6 +131,7 @@ if (document.getElementById('logout')) {
     e.preventDefault();
     localStorage.removeItem('token');
     localStorage.removeItem('username');
+    localStorage.removeItem('isAdmin');
     window.location.href = '/index.html';
   });
 }
