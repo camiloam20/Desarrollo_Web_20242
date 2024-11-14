@@ -91,7 +91,8 @@ class AuthController {
       res.json({
         success: true,
         message: 'Inicio de sesión exitoso',
-        token
+        token,
+        username: user.username  // Añadido el username a la respuesta
       });
     } catch (error) {
       console.error('Error en login:', error);

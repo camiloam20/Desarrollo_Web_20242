@@ -43,8 +43,8 @@ services:
     ports:
       - "3306:3306"
     volumes:
-    - db_data:/var/lib/mysql
-    - ./database.sql:/docker-entrypoint-initdb.d/database.sql
+      - db_data:/var/lib/mysql
+      - ./database.sql:/docker-entrypoint-initdb.d/database.sql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-ppassword_db"]
       interval: 5s  
@@ -54,6 +54,14 @@ services:
     networks:
       - app-network
     restart: unless-stopped
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8081:8080"
+    networks:
+      - app-network
 
 networks:
   app-network:

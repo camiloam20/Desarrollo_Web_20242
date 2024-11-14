@@ -62,15 +62,16 @@ function showPopup(type) {
       const result = await response.json();
 
       if (result.success) {
-        // Store the token
+        // Store the token and user data
         localStorage.setItem('token', result.token);
+        localStorage.setItem('username', data.username || result.username);
         
         // Close the popup
         overlay.remove();
         popup.remove();
         
-        // Optional: Redirect to dashboard or refresh page
-        window.location.reload();
+        // Redirect to dashboard
+        window.location.href = '/pages/dashboard.html';
       } else {
         errorDiv.textContent = result.message;
         errorDiv.style.display = 'block';
@@ -91,31 +92,38 @@ document.querySelectorAll('#register').forEach(btn => {
   btn.addEventListener('click', () => showPopup('register'));
 });
 
-// Function to check if user is logged in
+// Función para verificar el estado de autenticación
 function checkAuthStatus() {
   const token = localStorage.getItem('token');
-  if (token) {
-    // Update UI for logged-in state
-    document.querySelectorAll('#login, #register').forEach(btn => {
-      btn.style.display = 'none';
-    });
-    
-    // Add logout button if not exists
-    if (!document.querySelector('#logout')) {
-      const logoutBtn = document.createElement('a');
-      logoutBtn.id = 'logout';
-      logoutBtn.classList.add('btn-nav');
-      logoutBtn.textContent = 'Cerrar Sesión';
-      logoutBtn.href = '#';
-      logoutBtn.addEventListener('click', () => {
-        localStorage.removeItem('token');
-        window.location.reload();
-      });
-      
-      document.querySelector('.nav-buttons').appendChild(logoutBtn);
+  const username = localStorage.getItem('username');
+  const currentPath = window.location.pathname;
+  
+  // Si estamos en el dashboard
+  if (currentPath.includes('dashboard.html')) {
+    if (!token) {
+      // Si no hay token, redirigir al index
+      window.location.href = '/index.html';
+    } else {
+      // Si hay token, actualizar el nombre de usuario
+      const usernameElement = document.getElementById('username');
+      if (usernameElement) {
+        usernameElement.textContent = `Bienvenido, ${username}`;
+      }
     }
   }
+  // Si estamos en el index y hay un token, NO redirigimos automáticamente
+  // Esto permite que el index sea el punto de entrada inicial
 }
 
-// Check auth status when page loads
+// Manejar el cierre de sesión
+if (document.getElementById('logout')) {
+  document.getElementById('logout').addEventListener('click', (e) => {
+    e.preventDefault();
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    window.location.href = '/index.html';
+  });
+}
+
+// Verificar autenticación al cargar la página
 document.addEventListener('DOMContentLoaded', checkAuthStatus);
