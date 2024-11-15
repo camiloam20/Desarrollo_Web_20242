@@ -76,7 +76,11 @@ async function searchBooks(query) {
         displayResults(data.docs);
     } catch (error) {
         console.error('Error al buscar libros:', error);
-        searchResults.innerHTML = '<p>Error al buscar libros. Por favor, intenta de nuevo.</p>';
+        searchResults.innerHTML = `
+        <div class="loading-container">
+            <p class="loading">Error buscando libros. Por favor, intente de nuevo.</p>
+        </div>
+    `;
     }
 }
 
