@@ -14,23 +14,61 @@
     --shadow: rgba(0, 0, 0, 0.15);
 }
 
-/* Estilos base y reset */
+/* Aplica Flexbox al body para que el footer se quede al fondo */
 html, body {
     background: var(--gradient-bg);
     color: var(--light);
     font-family: 'Poppins', sans-serif;
     overscroll-behavior: none;
     overflow-x: hidden;
+    min-height: 100vh;  /* Asegura que el cuerpo ocupe toda la altura de la ventana */
+    display: flex;
+    flex-direction: column;
 }
 
-/* Fondo global en main para cubrir hero, features y cta-banner */
+/* Contenedor principal de la página */
 main {
     background: url("../images/Background.jpg") center center / cover no-repeat, var(--gradient-bg);
     color: var(--light);
     position: relative;
     z-index: 1;
+    flex: 1; /* Hace que el contenido ocupe el espacio restante */
 }
 
+main::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Sombra oscura */
+    z-index: 0;
+}
+
+/* Estilos del Footer */
+footer {
+    background: var(--primary-dark);
+    color: var(--light);
+    text-align: center;
+    padding: 5px;
+    font-size: 0.8em;
+    position: relative;
+    z-index: 1;
+}
+
+.footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
+
+/* Estilos Navigation bar */
 /* Logo */
 .logo {
     display: inline-flex;
@@ -97,19 +135,10 @@ nav {
     min-height: 400px;
     color: var(--light);
     z-index: 1;
+    position: relative;
 }
 
-.hero::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5); /* Superposición de color */
-    z-index: -1;
-}
-
+/* Ajuste del texto de la hero */
 .hero h1 {
     font-size: 3em;
     color: var(--accent);
@@ -121,6 +150,7 @@ nav {
     margin: 20px auto;
 }
 
+
 /* Sección Features */
 .features {
     display: grid;
@@ -128,8 +158,11 @@ nav {
     gap: 30px;
     padding: 50px;
     color: var(--light);
+    position: relative;
+    z-index: 1;
 }
 
+/* Estilos para las tarjetas dentro de features */
 .feature-card {
     background: var(--glass-bg);
     backdrop-filter: blur(10px);
@@ -148,22 +181,15 @@ nav {
     color: var(--secondary);
 }
 
-/* CTA Banner */
+/* Sección CTA Banner */
 .cta-banner {
     text-align: center;
     padding: 80px 20px;
-    background: var(--gradient-2);
+    background: var(--gradient-2); /* Ya tiene un fondo, se puede mantener o modificar */
     color: var(--dark);
     margin-top: 20px;
-}
-
-/* Footer */
-footer {
-    background: var(--primary-dark);
-    color: var(--light);
-    text-align: center;
-    padding: 5px;
-    font-size: 0.8em;
+    position: relative;
+    z-index: 1;
 }
 
 /* Fondo difuminado y centrado para el popup */
@@ -237,6 +263,33 @@ footer {
     color: var(--dark); 
 }
 
+/*Estilo contraseña de login y register*/
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .password-container input {
+    width: 100%;
+  }
+  
+  .toggle-password {
+    position: absolute;
+    right: 10px;
+    border: none;
+    background: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .eye-icon {
+    font-size: 1.2em;
+  }
+
+/* Estilos para el carrusel de fotos de pagina principal*/
 .carousel {
     position: relative;
     overflow: hidden;
@@ -296,4 +349,53 @@ footer {
 .carousel-btn:hover {
     background-color: rgba(0, 0, 0, 0.8);
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/*Estilos archivo dashboard.html*/
+/* Contenedor de la barra de búsqueda */
+
+.search-bar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    max-width: 900px;
+    margin: 20px auto;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 30px;
+    border: 2px solid var(--light);
+    font-size: 1em;
+    outline: none;
+    background-color: var(--glass-bg);
+    color: var(--accent);
+    max-width: 700px;
+    transition: width 0.3s ease;
+}
+
+.search-bar:focus {
+    width: 80%;
+    border-color: var(--secondary);
+}
+
+.search-btn {
+    padding: 12px;
+    margin-left: 10px;
+    background-color: var(--secondary);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.search-btn:hover {
+    background-color: var(--primary);
+}
+
+.search-btn i {
+    color: var(--light);
+    font-size: 1.2em;
 }

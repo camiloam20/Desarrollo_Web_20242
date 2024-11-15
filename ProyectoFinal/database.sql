@@ -44,5 +44,6 @@ CREATE TABLE user_books (
 
 -- Insertar un usuario administrador por defecto
 INSERT INTO users (full_name, email, password, birth_year, username, is_admin)
-VALUES ('Admin', 'admin@booknest.com', '$2b$10$ovYoWmwkLeytjyUtmMUQc.ckHfcqpkLekB7NkxlB3/v22Y3cWIlJC', 1990, 'admin', true);
--- La contraseña del admin es 'admin123' encriptada con bcrypt
+VALUES
+('Admin', 'admin@booknest.com', '$2b$10$ovYoWmwkLeytjyUtmMUQc.ckHfcqpkLekB7NkxlB3/v22Y3cWIlJC', 1990, 'admin', true),-- La contraseña del admin es 'admin123' encriptada con bcrypt
+('Camilo Alvarez Muñoz', 'camiloam20@gmail.com', '$2b$10$qUixULMt7KM4G3MvWkHKAOPsdRdG25Y6hVxEwc0Du4xouOqSoidny', 	2001, 'camiloam20', false);-- La contraseña de este usuario es 'contraseña' encriptada con bcrypt
