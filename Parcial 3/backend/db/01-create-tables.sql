@@ -1,7 +1,3 @@
-CREATE DATABASE medical_appointments;
-
-\c medical_appointments
-
 CREATE TABLE specialty (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,

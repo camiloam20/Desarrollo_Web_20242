@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  api:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=medical_appointments
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - JWT_SECRET=your_jwt_secret
+      - CORS_ORIGIN=http://localhost:${FRONTEND_PORT:-8080}
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend/src:/app/src
+    networks:
+      - app-network
+
+  db:
+    image: postgres:14-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: medical_appointments
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d medical_appointments"]
+      interval: 10s  
+      timeout: 10s
+      retries: 10
+      start_period: 10s
+    networks:
+      - app-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - db
+
+networks:
+  app-network:
+    driver: bridge
+
+
+volumes:
+  postgres_data:
