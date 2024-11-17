@@ -1,6 +1,4 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const pool = require('../config/database');
+const authService = require('../services/authServices');
 
 class AuthController {
   async register(req, res) {
@@ -11,33 +9,19 @@ class AuthController {
       const birthYear = new Date(birthDate).getFullYear();
       
       // Check if user already exists
-      const [existingUsers] = await pool.query(
-        'SELECT * FROM users WHERE email = ? OR username = ?',
-        [email, username]
-      );
-      
-      if (existingUsers.length > 0) {
+      const userExists = await authService.checkExistingUser(email, username);
+      if (userExists) {
         return res.status(400).json({
           success: false,
           message: 'El correo electrónico o nombre de usuario ya está registrado'
         });
       }
       
-      // Hash password
-      const hashedPassword = await bcrypt.hash(password, 10);
-      
-      // Insert new user
-      const [result] = await pool.query(
-        'INSERT INTO users (full_name, email, password, birth_year, username) VALUES (?, ?, ?, ?, ?)',
-        [fullName, email, hashedPassword, birthYear, username]
-      );
+      // Create new user
+      const userId = await authService.createUser(fullName, email, password, birthYear, username);
       
       // Generate JWT token
-      const token = jwt.sign(
-        { userId: result.insertId, email },
-        process.env.JWT_SECRET,
-        { expiresIn: '24h' }
-      );
+      const token = authService.generateToken(userId, email, false);
       
       res.status(201).json({
         success: true,
@@ -58,23 +42,17 @@ class AuthController {
     try {
       const { email, password } = req.body;
       
-      // Find user with is_admin field
-      const [users] = await pool.query(
-        'SELECT *, is_admin FROM users WHERE email = ?',
-        [email]
-      );
-      
-      if (users.length === 0) {
+      // Find user
+      const user = await authService.findUserByEmail(email);
+      if (!user) {
         return res.status(401).json({
           success: false,
           message: 'Credenciales inválidas'
         });
       }
       
-      const user = users[0];
-      
       // Verify password
-      const validPassword = await bcrypt.compare(password, user.password);
+      const validPassword = await authService.validatePassword(password, user.password);
       if (!validPassword) {
         return res.status(401).json({
           success: false,
@@ -83,11 +61,7 @@ class AuthController {
       }
       
       // Generate JWT token
-      const token = jwt.sign(
-        { userId: user.id, email: user.email, isAdmin: user.is_admin },
-        process.env.JWT_SECRET,
-        { expiresIn: '24h' }
-      );
+      const token = authService.generateToken(user.id, user.email, user.is_admin);
       
       res.json({
         success: true,
