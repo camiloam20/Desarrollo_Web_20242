@@ -97,6 +97,73 @@ class BookService {
       throw error;
     }
   }
+
+  async getUserLists(userId) {
+    try {
+        const [results] = await pool.query(
+            `SELECT b.*, ub.status, ub.rating, ub.review 
+             FROM user_books ub 
+             JOIN books b ON ub.book_id = b.id 
+             WHERE ub.user_id = ?`,
+            [userId]
+        );
+
+        // Organizar libros por estado
+        const lists = {
+            favourites: [],
+            reading: [],
+            'to-read': [],
+            read: []
+        };
+
+        results.forEach(book => {
+            if (lists[book.status]) {
+                lists[book.status].push(book);
+            }
+        });
+
+        return lists;
+    } catch (error) {
+        console.error('Error en getUserLists:', error);
+        throw error;
+    }
+}
+
+async removeFromFavorites(userId, bookId) {
+    try {
+        await pool.query(
+            'DELETE FROM user_books WHERE user_id = ? AND book_id = ? AND status = "favourites"',
+            [userId, bookId]
+        );
+    } catch (error) {
+        console.error('Error en removeFromFavorites:', error);
+        throw error;
+    }
+}
+
+async removeFromList(userId, bookId) {
+    try {
+        await pool.query(
+            'DELETE FROM user_books WHERE user_id = ? AND book_id = ?',
+            [userId, bookId]
+        );
+    } catch (error) {
+        console.error('Error en removeFromList:', error);
+        throw error;
+    }
+}
+
+async deleteReview(userId, bookId) {
+    try {
+        await pool.query(
+            'UPDATE user_books SET rating = NULL, review = NULL WHERE user_id = ? AND book_id = ?',
+            [userId, bookId]
+        );
+    } catch (error) {
+        console.error('Error en deleteReview:', error);
+        throw error;
+    }
+}
 }
 
 module.exports = new BookService();

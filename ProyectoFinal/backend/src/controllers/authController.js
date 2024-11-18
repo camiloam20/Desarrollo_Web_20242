@@ -5,10 +5,9 @@ class AuthController {
     try {
       const { fullName, username, email, password, birthDate } = req.body;
       
-      // Calculate birth year from birthDate
       const birthYear = new Date(birthDate).getFullYear();
       
-      // Check if user already exists
+      // Verificar si el usuario ya existe
       const userExists = await authService.checkExistingUser(email, username);
       if (userExists) {
         return res.status(400).json({
@@ -17,10 +16,10 @@ class AuthController {
         });
       }
       
-      // Create new user
+      // crear nuevo usuario
       const userId = await authService.createUser(fullName, email, password, birthYear, username);
       
-      // Generate JWT token
+      // Generar token JWT
       const token = authService.generateToken(userId, email, false);
       
       res.status(201).json({
@@ -42,7 +41,7 @@ class AuthController {
     try {
       const { email, password } = req.body;
       
-      // Find user
+      // Encontrar usuario por email
       const user = await authService.findUserByEmail(email);
       if (!user) {
         return res.status(401).json({
@@ -51,7 +50,7 @@ class AuthController {
         });
       }
       
-      // Verify password
+      // Verificar contraseña
       const validPassword = await authService.validatePassword(password, user.password);
       if (!validPassword) {
         return res.status(401).json({
@@ -60,7 +59,7 @@ class AuthController {
         });
       }
       
-      // Generate JWT token
+      // Generar token JWT
       const token = authService.generateToken(user.id, user.email, user.is_admin);
       
       res.json({

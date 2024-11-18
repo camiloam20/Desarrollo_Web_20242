@@ -1,0 +1,252 @@
+/* Contenedor principal de listas */
+.lists-container {
+    padding: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative; /* Asegura que el z-index funcione correctamente */
+    z-index: 1;
+}
+
+.lists-container p {
+    text-align: center;
+    font-size: 1.2em;
+    max-width: 700px;
+    margin: 20px auto;
+}
+
+.lists-grid {
+    display: grid;
+    gap: 40px;
+}
+
+.list-section {
+    background: var(--glass-bg);
+    border-radius: 15px;
+    padding: 25px;
+}
+
+.list-section h2 {
+    color: var(--accent);
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+.books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 25px;
+}
+
+.empty-list {
+    text-align: center;
+    color: var(--light);
+    opacity: 0.7;
+    padding: 20px;
+    grid-column: 1 / -1;
+}
+
+.book-card {
+    position: relative;
+    z-index: 2;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    height: 90%;
+}
+.book-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px var(--shadow);
+}
+
+.book-card img {
+    width: 150px;
+    height: 225px;
+    object-fit: cover;
+    margin: 0 auto 15px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.book-card h3 {
+    color: var(--light);
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+.book-card p {
+    color: var(--light);
+    opacity: 0.8;
+    font-size: 0.9em;
+    margin: 5px 0;
+}
+
+.book-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--dark);
+    border-radius: 20px;
+    padding: 40px;
+    width: 95%;
+    max-width: 1200px;
+    height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 15px 30px var(--shadow);
+    z-index: 1000;
+    color: var(--light);
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.book-popup.active {
+    display: block;
+    opacity: 1;
+}
+
+.book-popup-content {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 40px;
+}
+
+/* Botón de cerrar popup */
+.book-popup-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: var(--light);
+    font-size: 2em;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.book-popup-close:hover {
+    color: var(--accent);
+}
+
+/* Estilos para los botones de acción */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Botones de acción específicos */
+.remove-favorite-btn,
+.remove-list-btn,
+.delete-review-btn {
+    width: 100%;
+    padding: 12px 20px;
+    background: var(--secondary);
+    color: var(--dark);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    margin-top: 15px;
+}
+
+.remove-favorite-btn:hover,
+.remove-list-btn:hover,
+.delete-review-btn:hover {
+    background: var(--accent);
+}
+
+/* Sección de reseña */
+.book-review {
+    margin-top: 30px;
+    padding: 20px;
+    background: var(--glass-bg);
+    border-radius: 15px;
+    border: 1px solid var(--glass-border);
+    color: var(--light);
+}
+
+.book-review h3 {
+    color: var(--accent);
+    margin-bottom: 15px;
+}
+
+.book-review .stars {
+    margin-bottom: 15px;
+}
+
+.book-review p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.book-details {
+    padding-right: 20px;
+}
+
+.book-details h2 {
+    color: var(--accent);
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.book-description {
+    margin-top: 30px;
+    background: var(--glass-bg);
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.book-description h3 {
+    color: var(--accent);
+    margin-bottom: 15px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .lists-container {
+        padding: 15px;
+    }
+    
+    .lists-grid {
+        gap: 25px;
+    }
+    
+    .list-section {
+        padding: 15px;
+    }
+    
+    .books-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+    }
+}
+
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 999;
+    display: none;
+}
+
+.popup-overlay.active {
+    display: block;
+}
