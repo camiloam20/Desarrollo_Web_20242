@@ -686,3 +686,168 @@ nav {
     background: var(--accent);
 }
 
+/* Estilos para los botones de acción */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Botón de favoritos */
+.favorite-btn {
+    background: var(--secondary);
+    color: var(--dark);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.favorite-btn.active {
+    background: var(--accent);
+}
+
+.favorite-btn i {
+    font-size: 1.2em;
+}
+
+.list-btn {
+    width: 100%;
+    padding: 12px 20px;
+    background: var(--primary);
+    color: var(--light);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.list-dropdown:hover .list-options {
+    display: block;
+}
+
+
+.list-option:hover {
+    background: var(--primary);
+}
+
+.list-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.list-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--dark);
+    border-radius: 8px;
+    padding: 8px;
+    margin-top: 5px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    display: none;
+    z-index: 1000;
+}
+
+.list-option {
+    width: 100%;
+    padding: 10px;
+    background: none;
+    border: none;
+    color: var(--light);
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+}
+
+.list-option:hover {
+    background: var(--primary);
+}
+
+/* Botón de reseña */
+.review-btn {
+    padding: 12px 20px;
+    background: var(--accent);
+    color: var(--dark);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+/* Formulario de reseña */
+.review-form {
+    margin-top: 30px;
+    padding: 20px;
+    background: var(--glass-bg);
+    border-radius: 15px;
+}
+
+.star-rating {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+}
+
+.star-rating i {
+    color: var(--accent);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.review-text {
+    width: 100%;
+    min-height: 100px;
+    padding: 15px;
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    background: var(--glass-bg);
+    color: var(--light);
+    margin-bottom: 15px;
+    resize: vertical;
+}
+
+.submit-review {
+    padding: 12px 25px;
+    background: var(--secondary);
+    color: var(--dark);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.submit-review:hover {
+    background: var(--accent);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .action-buttons {
+        margin-top: 15px;
+    }
+    
+    .favorite-btn,
+    .list-btn,
+    .review-btn {
+        padding: 10px 15px;
+    }
+    
+    .review-form {
+        margin-top: 20px;
+        padding: 15px;
+    }
+}

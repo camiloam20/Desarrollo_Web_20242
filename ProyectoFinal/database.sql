@@ -35,7 +35,7 @@ CREATE TABLE user_books (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
   book_id INT NOT NULL,
-  status ENUM('read', 'reading', 'to-read') NOT NULL,
+  status ENUM('favourites','read', 'reading', 'to-read') NOT NULL,
   rating INT CHECK (rating >= 1 AND rating <= 5),
   review TEXT,
   FOREIGN KEY (user_id) REFERENCES users(id),
@@ -45,5 +45,5 @@ CREATE TABLE user_books (
 -- Insertar un usuario administrador por defecto
 INSERT INTO users (full_name, email, password, birth_year, username, is_admin)
 VALUES
-('Admin', 'admin@booknest.com', '$2b$10$ovYoWmwkLeytjyUtmMUQc.ckHfcqpkLekB7NkxlB3/v22Y3cWIlJC', 1990, 'admin', true),-- La contraseña del admin es 'admin123' encriptada con bcrypt
+('Admin', 'admin@booknest.com', '$2b$10$ovYoWmwkLeytjyUtmMUQc.ckHfcqpkLekB7NkxlB3/v22Y3cWIlJC', 1990, 'admin', true),-- La contraseña del admin es 'admin12345' encriptada con bcrypt
 ('Camilo Alvarez Muñoz', 'camiloam20@gmail.com', '$2b$10$qUixULMt7KM4G3MvWkHKAOPsdRdG25Y6hVxEwc0Du4xouOqSoidny', 	2001, 'camiloam20', false);-- La contraseña de este usuario es 'contraseña' encriptada con bcrypt
