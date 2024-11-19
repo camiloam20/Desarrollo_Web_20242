@@ -313,20 +313,6 @@
     }
 }
 
-.favorite-btn {
-    background: var(--secondary);
-    color: var(--dark);
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: background-color 0.3s;
-}
-
 .favorite-btn:hover {
     background: var(--accent);
 }
@@ -512,4 +498,21 @@
 
 .book-popup-close:hover {
     color: var(--accent);
+}
+
+.remove-favorite-btn {
+    width: 100%;
+    padding: 12px 20px;
+    background: var(--secondary);
+    color: var(--dark);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    margin-top: 15px;
 }

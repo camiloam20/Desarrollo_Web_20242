@@ -1,3 +1,4 @@
+//frontend/scripts/lists.js
 document.addEventListener('DOMContentLoaded', async () => {
   // Verificar autenticación
   const token = localStorage.getItem('token');
@@ -192,36 +193,39 @@ function showError(message) {
 
 // Función para mostrar detalles del libro
 function showBookDetails(book) {
-  const bookPopup = document.querySelector('.book-popup');
-  const popupOverlay = document.querySelector('.popup-overlay');
+    const bookPopup = document.querySelector('.book-popup');
+    const popupOverlay = document.querySelector('.popup-overlay');
 
-  const stars = book.rating ? generateStarRating(book.rating) : '';
+    const stars = book.rating ? generateStarRating(book.rating) : '';
 
-  bookPopup.innerHTML = `
-      <button class="book-popup-close">&times;</button>
-      <div class="book-popup-content">
-          <div class="book-image">
-              <img src="${book.image || '../images/no-cover.png'}" alt="Portada de ${book.title}">
-              <div class="action-buttons">
-                  ${book.status === 'favourites' ? `
-                      <button class="remove-favorite-btn">
-                          <i class="fas fa-heart-broken"></i>
-                          Eliminar de favoritos
-                      </button>
-                  ` : `
-                      <button class="remove-list-btn">
-                          <i class="fas fa-times"></i>
-                          Eliminar de la lista
-                      </button>
-                  `}
-              </div>
-          </div>
+    bookPopup.innerHTML = `
+        <button class="book-popup-close">&times;</button>
+        <div class="book-popup-content">
+            <div class="book-image">
+                <img src="${book.image || '../images/no-cover.png'}" alt="Portada de ${book.title}">
+                <div class="action-buttons">
+                    ${book.favourite ? `
+                        <button class="remove-favorite-btn">
+                            <i class="fas fa-heart-broken"></i>
+                            Eliminar de favoritos
+                        </button>
+                    ` : `
+                        <button class="favorite-btn">
+                            <i class="fas fa-heart"></i>
+                            Añadir a favoritos
+                        </button>
+                    `}
+                    <button class="remove-list-btn">
+                        <i class="fas fa-times"></i>
+                        Eliminar de la lista
+                    </button>
+                </div>
+            </div>
           <div class="book-details">
               <h2>${book.title}</h2>
               <p><strong>Autor:</strong> ${book.author}</p>
               <p><strong>Editorial:</strong> ${book.publisher}</p>
               <p><strong>Género:</strong> ${book.genre}</p>
-              <p><strong>Páginas:</strong> ${book.pages}</p>
               <div class="book-description">
                   <h3>Descripción</h3>
                   <p>${book.description}</p>
@@ -260,10 +264,17 @@ function generateStarRating(rating) {
 // Función para configurar event listeners del popup
 function setupPopupEventListeners(popup, book) {
   const closeBtn = popup.querySelector('.book-popup-close');
+  const addFavBtn = popup.querySelector('.favorite-btn');
   const removeFavBtn = popup.querySelector('.remove-favorite-btn');
   const removeListBtn = popup.querySelector('.remove-list-btn');
   const deleteReviewBtn = popup.querySelector('.delete-review-btn');
 
+  if (addFavBtn) {
+    addFavBtn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        await addToFavorites(book.id);
+    });
+}
   if (closeBtn) {
       closeBtn.addEventListener('click', (e) => {
           e.stopPropagation();
@@ -314,6 +325,25 @@ function closePopup() {
 }
 
 // Funciones para interactuar con el backend
+async function addToFavorites(bookId) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:3000/api/books/add-favorites/${bookId}`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            closePopup();
+            loadReadingLists();
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
 async function removeFromFavorites(bookId) {
   try {
       const token = localStorage.getItem('token');

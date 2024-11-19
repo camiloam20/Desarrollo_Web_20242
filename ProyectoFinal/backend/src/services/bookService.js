@@ -74,41 +74,16 @@ class BookService {
     }
   }
 
-  async getBookStatus(userId, bookId) {
-    try {
-      const [results] = await pool.query(
-        'SELECT ub.status, ub.rating, ub.review FROM user_books ub ' +
-        'JOIN books b ON ub.book_id = b.id ' +
-        'WHERE ub.user_id = ? AND b.id = ?',
-        [userId, bookId]
-      );
-
-      if (results.length > 0) {
-        return {
-          status: results[0].status,
-          rating: results[0].rating,
-          review: results[0].review
-        };
-      }
-      
-      return null;
-    } catch (error) {
-      console.error('Error en getBookStatus:', error);
-      throw error;
-    }
-  }
-
   async getUserLists(userId) {
     try {
         const [results] = await pool.query(
-            `SELECT b.*, ub.status, ub.rating, ub.review 
+            `SELECT b.*, ub.status, ub.favourite, ub.rating, ub.review 
              FROM user_books ub 
              JOIN books b ON ub.book_id = b.id 
              WHERE ub.user_id = ?`,
             [userId]
         );
 
-        // Organizar libros por estado
         const lists = {
             favourites: [],
             reading: [],
@@ -117,6 +92,12 @@ class BookService {
         };
 
         results.forEach(book => {
+            // Add to favorites list if favourites is true
+            if (book.favourite) {
+                lists.favourites.push(book);
+            }
+            
+            // Add to corresponding reading status list
             if (lists[book.status]) {
                 lists[book.status].push(book);
             }
@@ -129,16 +110,28 @@ class BookService {
     }
 }
 
+async addToFavorites(userId, bookId) {
+  try {
+      await pool.query(
+          'UPDATE user_books SET favourite = true WHERE user_id = ? AND book_id = ?',
+          [userId, bookId]
+      );
+  } catch (error) {
+      console.error('Error en addToFavorites:', error);
+      throw error;
+  }
+}
+
 async removeFromFavorites(userId, bookId) {
-    try {
-        await pool.query(
-            'DELETE FROM user_books WHERE user_id = ? AND book_id = ? AND status = "favourites"',
-            [userId, bookId]
-        );
-    } catch (error) {
-        console.error('Error en removeFromFavorites:', error);
-        throw error;
-    }
+  try {
+      await pool.query(
+          'UPDATE user_books SET favourite = false WHERE user_id = ? AND book_id = ?',
+          [userId, bookId]
+      );
+  } catch (error) {
+      console.error('Error en removeFromFavorites:', error);
+      throw error;
+  }
 }
 
 async removeFromList(userId, bookId) {

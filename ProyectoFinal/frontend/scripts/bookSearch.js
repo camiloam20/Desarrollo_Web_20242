@@ -3,6 +3,10 @@
 // URL base para las peticiones API
 const API_BASE_URL = 'http://localhost:3000/api/books';
 
+// Variable global para almacenar las listas
+let userLists = null;
+let bookStatus = null;
+
 // Elementos DOM
 let searchBar = document.querySelector('.search-bar');
 let searchBtn = document.querySelector('.search-btn');
@@ -87,15 +91,6 @@ function enterSearchMode() {
     }
 }
 
-// Función para mostrar el mensaje de carga
-function displayLoadingMessage() {
-    searchResults.innerHTML = `
-        <div class="loading-container">
-            <p class="loading">Buscando libros...</p>
-        </div>
-    `;
-}
-
 // Función para buscar libros
 async function searchBooks(query) {
     try {
@@ -113,6 +108,15 @@ async function searchBooks(query) {
         </div>
     `;
     }
+}
+
+// Función para mostrar el mensaje de carga
+function displayLoadingMessage() {
+    searchResults.innerHTML = `
+        <div class="loading-container">
+            <p class="loading">Buscando libros...</p>
+        </div>
+    `;
 }
 
 // Función para mostrar resultados
@@ -163,7 +167,16 @@ function generateStarRating(rating) {
 async function checkBookStatus(bookId) {
     try {
         const token = localStorage.getItem('token');
-        if (!token) return null;
+        if (!token) {
+            return {
+                status: null,
+                rating: null,
+                review: null,
+                favourite: false
+            };
+        }
+
+        console.log('Checking status for bookId:', bookId); // Para debugging
 
         const response = await fetch(`${API_BASE_URL}/status/${bookId}`, {
             headers: {
@@ -175,23 +188,55 @@ async function checkBookStatus(bookId) {
             throw new Error('Error al obtener el estado del libro');
         }
 
-        return await response.json();
+        const data = await response.json();
+        console.log('Received book status:', data); // Para debugging
+
+        // Si recibimos datos válidos, los retornamos
+        if (data && typeof data === 'object') {
+            return {
+                status: data.status,
+                rating: data.rating,
+                review: data.review,
+                favourite: Boolean(data.favourite)
+            };
+        }
+
+        // Si no hay datos, retornamos valores por defecto
+        return {
+            status: null,
+            rating: null,
+            review: null,
+            favourite: false
+        };
     } catch (error) {
         console.error('Error al verificar estado del libro:', error);
-        return null;
+        return {
+            status: null,
+            rating: null,
+            review: null,
+            favourite: false
+        };
     }
 }
 
-
 // Función para mostrar detalles del libro actualizada
+// Función showBookDetails modificada
 async function showBookDetails(book) {
     try {
+        // Cargar las listas si aún no se han cargado
+        if (!userLists) {
+            await loadReadingLists();
+        }
+
+        // Buscar el libro en las listas y obtener su estado
+        bookStatus = findBookInLists(book);
+
         const workId = book.key.split('/')[2];
-        const [details, ratingsData, readingStats, bookStatus] = await Promise.all([
+
+        const [details, ratingsData, readingStats] = await Promise.all([
             fetch(`https://openlibrary.org/works/${workId}.json`).then(res => res.json()),
             fetch(`https://openlibrary.org/works/${workId}/ratings.json`).then(res => res.json()),
-            fetch(`https://openlibrary.org/works/${workId}/bookshelves.json`).then(res => res.json()),
-            checkBookStatus(workId)
+            fetch(`https://openlibrary.org/works/${workId}/bookshelves.json`).then(res => res.json())
         ]);
 
         const coverID = book.cover_i || '';
@@ -226,10 +271,17 @@ async function showBookDetails(book) {
                 <div class="book-image">
                     <img src="${coverUrl}" alt="Portada de ${book.title}">
                     <div class="action-buttons">
-                        <button class="favorite-btn ${bookStatus?.status === 'favourites' ? 'active' : ''}">
-                            <i class="fas fa-heart"></i>
-                            ${bookStatus?.status === 'favourites' ? 'En favoritos' : 'Añadir a favoritos'}
-                        </button>
+                        ${bookStatus?.favourite ? `
+                            <button class="remove-favorite-btn">
+                                <i class="fas fa-heart-broken"></i>
+                                Eliminar de favoritos
+                            </button>
+                        ` : `
+                            <button class="favorite-btn">
+                                <i class="fas fa-heart"></i>
+                                Añadir a favoritos
+                            </button>
+                        `}
                         <div class="list-dropdown">
                             <button class="list-btn">
                                 ${bookStatus?.status ? `En lista: ${bookStatus.status}` : 'Añadir a lista'}
@@ -363,10 +415,6 @@ async function addToList(bookData, status) {
             return;
         }
 
-        if (!token.trim()) {
-            throw new Error('Token inválido');
-        }
-
         const response = await fetch(`${API_BASE_URL}/add-to-list`, {
             method: 'POST',
             headers: {
@@ -375,8 +423,7 @@ async function addToList(bookData, status) {
             },
             body: JSON.stringify({
                 bookData,
-                status,
-                maintainFavorite: true  // Nueva bandera para mantener el estado de favoritos
+                status
             })
         });
 
@@ -390,8 +437,7 @@ async function addToList(bookData, status) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (error) {
         console.error('Error:', error);
         throw error;
@@ -478,10 +524,44 @@ async function handleReviewSubmission(bookData, rating, reviewText) {
     }
 }
 
+async function loadReadingLists() {
+    try {
+        const token = localStorage.getItem('token');
+        console.log('Fetching lists data...');
+        
+        const response = await fetch('http://localhost:3000/api/books/lists', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+  
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Server error: ${errorData.message || response.statusText}`);
+        }
+  
+        const data = await response.json();
+        console.log('Received data:', data);
+        
+        if (!data || typeof data !== 'object') {
+            throw new Error('Invalid data format received from server');
+        }
+  
+        findbook(data);
+    } catch (error) {
+        console.error('Error in loadReadingLists:', error);
+        showError('Error al cargar las listas de lectura');
+    }
+  }
+
 // Función para configurar los event listeners
 function setupEventListeners(popup, bookData) {
     const closeBtn = popup.querySelector('.book-popup-close');
     const favBtn = popup.querySelector('.favorite-btn');
+    const removeFavBtn = popup.querySelector('.remove-favorite-btn');
     const listBtn = popup.querySelector('.list-btn');
     const listDropdown = popup.querySelector('.list-dropdown');
     const listOptions = popup.querySelectorAll('.list-option');
@@ -495,21 +575,20 @@ function setupEventListeners(popup, bookData) {
     // Configurar calificación con estrellas
     const getSelectedRating = setupStarRating(popup);
 
+    if (favBtn) {
+        favBtn.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            await addToList(bookData, 'favorites');
+            await addToFavorites(bookStatus.id);
+        });
+    }
 
-    // Manejar favoritos
-    favBtn.addEventListener('click', async () => {
-        try {
-            const result = await addToList(bookData, 'favourites');
-            if (result) {
-                favBtn.classList.toggle('active');
-                favBtn.innerHTML = favBtn.classList.contains('active') ?
-                    '<i class="fas fa-heart"></i> En favoritos' :
-                    '<i class="fas fa-heart"></i> Añadir a favoritos';
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    });
+    if (removeFavBtn) {
+        removeFavBtn.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            await removeFromFavorites(bookStatus.id);
+        });
+    }
 
     // Manejar menú desplegable
     listBtn.addEventListener('click', (e) => {
@@ -577,4 +656,141 @@ function setupEventListeners(popup, bookData) {
             alert('Error al enviar la reseña. Por favor, inicia sesión.');
         }
     });
+}
+
+// Funciones para interactuar con el backend
+async function addToFavorites(bookId) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:3000/api/books/add-favorites/${bookId}`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            closePopup();
+            loadReadingLists();
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+async function removeFromFavorites(bookId) {
+  try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:3000/api/books/remove-favorite/${bookId}`, {
+          method: 'DELETE',
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      });
+
+      if (response.ok) {
+          closePopup();
+          loadReadingLists();
+      }
+  } catch (error) {
+      console.error('Error:', error);
+  }
+}
+
+// Función modificada para cargar y almacenar las listas
+async function loadReadingLists() {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            userLists = null;
+            return;
+        }
+        
+        console.log('Fetching lists data...');
+        
+        const response = await fetch('http://localhost:3000/api/books/lists', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Server error: ${errorData.message || response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log('Received data:', data);
+        
+        if (!data || typeof data !== 'object') {
+            throw new Error('Invalid data format received from server');
+        }
+
+        // Almacenar las listas en la variable global
+        userLists = data;
+        return data;
+    } catch (error) {
+        console.error('Error in loadReadingLists:', error);
+        showError('Error al cargar las listas de lectura');
+        userLists = null;
+    }
+}
+
+function findBookInLists(book) {
+    if (!userLists) return null;
+
+    // Object to store the status and additional details
+    const bookStatus = {
+        id: null,
+        status: null,
+        favourite: false,
+        rating: null,
+        review: null
+    };
+
+    // Helper function to compare books
+    const isSameBook = (listBook, searchBook) => {
+        // Comparar por título y autor
+        return listBook.title === searchBook.title && 
+               listBook.author === (searchBook.author_name?.[0] || searchBook.author);
+    };
+
+    // Check if book is in favourites list
+    if (userLists.favourites && Array.isArray(userLists.favourites)) {
+        const inFavorites = userLists.favourites.some(listBook => isSameBook(listBook, book));
+        if (inFavorites) {
+            bookStatus.favourite = true;
+        }
+    }
+
+    // Arrays to check for reading status
+    const statusLists = ['reading', 'to-read', 'read'];
+
+    // Check each reading status list
+    for (const listName of statusLists) {
+        if (userLists[listName] && Array.isArray(userLists[listName])) {
+            const foundBook = userLists[listName].find(listBook => isSameBook(listBook, book));
+
+            if (foundBook) {
+                bookStatus.id = foundBook.id;
+                bookStatus.status = listName;
+                // Copy additional properties if they exist
+                if (foundBook.rating) bookStatus.rating = foundBook.rating;
+                if (foundBook.review) bookStatus.review = foundBook.review;
+                break; // Exit loop once we find the book in a list
+            }
+        }
+    }
+
+    // Return null if no matches found in any list and book is not favorite
+    if (!bookStatus.status && !bookStatus.favourite) {
+        return null;
+    }
+
+    // Para debugging
+    console.log('Found book status:', bookStatus);
+    return bookStatus;
 }

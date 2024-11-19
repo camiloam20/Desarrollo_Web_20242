@@ -59,6 +59,7 @@
     flex-direction: column;
     height: 90%;
 }
+
 .book-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 15px 30px var(--shadow);
@@ -249,4 +250,28 @@
 
 .popup-overlay.active {
     display: block;
+}
+
+/* Botón de favoritos */
+.favorite-btn {
+    background: var(--secondary);
+    color: var(--dark);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.favorite-btn.active {
+    background: var(--accent);
+}
+
+.favorite-btn i {
+    font-size: 1.2em;
 }

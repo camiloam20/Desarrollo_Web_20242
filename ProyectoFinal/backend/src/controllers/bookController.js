@@ -51,23 +51,6 @@ class BookController {
     }
   }
 
-  async getBookStatus(req, res) {
-    try {
-      const userId = req.user.id;
-      const { bookId } = req.params;
-
-      const status = await BookService.getBookStatus(userId, bookId);
-      
-      res.json(status);
-    } catch (error) {
-      console.error('Error al obtener estado del libro:', error);
-      res.status(500).json({
-        success: false,
-        message: 'Error al obtener el estado del libro'
-      });
-    }
-  }
-
   async getLists(req, res) {
     try {
         const userId = req.user.id;
@@ -80,6 +63,18 @@ class BookController {
             message: 'Error al obtener las listas de lectura'
         });
     }
+}
+
+async addToFavorites(req, res) {
+  try {
+      const userId = req.user.id;
+      const { bookId } = req.params;
+      await BookService.addToFavorites(userId, bookId);
+      res.json({ success: true });
+  } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ success: false });
+  }
 }
 
 async removeFromFavorites(req, res) {
@@ -121,3 +116,6 @@ async deleteReview(req, res) {
 
 
 module.exports = new BookController();
+
+
+
