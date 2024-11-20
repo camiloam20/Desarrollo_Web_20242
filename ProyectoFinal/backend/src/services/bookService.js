@@ -92,12 +92,10 @@ class BookService {
         };
 
         results.forEach(book => {
-            // Add to favorites list if favourites is true
             if (book.favourite) {
                 lists.favourites.push(book);
             }
             
-            // Add to corresponding reading status list
             if (lists[book.status]) {
                 lists[book.status].push(book);
             }
@@ -135,15 +133,30 @@ async removeFromFavorites(userId, bookId) {
 }
 
 async removeFromList(userId, bookId) {
-    try {
-        await pool.query(
-            'DELETE FROM user_books WHERE user_id = ? AND book_id = ?',
-            [userId, bookId]
-        );
-    } catch (error) {
-        console.error('Error en removeFromList:', error);
-        throw error;
-    }
+  try {
+      // Verificar si esta en favoritos
+      const [checkResult] = await pool.query(
+          'SELECT favourite FROM user_books WHERE user_id = ? AND book_id = ?',
+          [userId, bookId]
+      );
+
+      // Si esta en favoritos, se actualiza  status a 'favourites' para evitar eliminarlo de la lista de favoritos
+      if (checkResult.length > 0 && checkResult[0].favourite === 1) {
+          await pool.query(
+              'UPDATE user_books SET status = "favourites" WHERE user_id = ? AND book_id = ?',
+              [userId, bookId]
+          );
+      } else {
+          // Si no esta en favoritos, se elimina de la tabla
+          await pool.query(
+              'DELETE FROM user_books WHERE user_id = ? AND book_id = ?',
+              [userId, bookId]
+          );
+      }
+  } catch (error) {
+      console.error('Error en removeFromList:', error);
+      throw error;
+  }
 }
 
 async deleteReview(userId, bookId) {

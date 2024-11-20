@@ -230,6 +230,7 @@ async function showBookDetails(book) {
 
         // Buscar el libro en las listas y obtener su estado
         bookStatus = findBookInLists(book);
+        bookDataSave = book;
 
         const workId = book.key.split('/')[2];
 
@@ -578,8 +579,42 @@ function setupEventListeners(popup, bookData) {
     if (favBtn) {
         favBtn.addEventListener('click', async (e) => {
             e.stopPropagation();
-            await addToList(bookData, 'favorites');
-            await addToFavorites(bookStatus.id);
+            
+            try {
+                // Si ya está en favoritos o tiene un estado
+                if (bookStatus && (bookStatus.favourite || bookStatus.status !== undefined)) {
+                    if (bookStatus.id) {
+                        await addToFavorites(bookStatus.id);
+                    } else {
+                        // Si no tiene ID, primero agregar a la lista
+                        await addToList(bookData, 'favourites');
+                        await loadReadingLists();
+                        
+                        const updatedBookStatus = findBookInLists(bookData);
+                        if (updatedBookStatus && updatedBookStatus.id) {
+                            await addToFavorites(updatedBookStatus.id);
+                        } else {
+                            console.error('No se pudo encontrar el libro en las listas');
+                            alert('Error al añadir a favoritos. Por favor, intenta de nuevo.');
+                        }
+                    }
+                } else {
+                    // Si no existe en ninguna lista
+                    await addToList(bookData, 'favourites');
+                    await loadReadingLists();
+                    
+                    const updatedBookStatus = findBookInLists(bookData);
+                    if (updatedBookStatus && updatedBookStatus.id) {
+                        await addToFavorites(updatedBookStatus.id);
+                    } else {
+                        console.error('No se pudo encontrar el libro en las listas');
+                        alert('Error al añadir a favoritos. Por favor, intenta de nuevo.');
+                    }
+                }
+            } catch (error) {
+                console.error('Error adding to favorites:', error);
+                alert('Error al añadir a favoritos. Por favor, intenta de nuevo.');
+            }
         });
     }
 
@@ -636,19 +671,29 @@ function setupEventListeners(popup, bookData) {
         try {
             const rating = getSelectedRating();
             const reviewText = popup.querySelector('.review-text').value;
-
+            
             if (!rating || !reviewText) {
                 alert('Por favor, proporciona una calificación y una reseña');
                 return;
             }
-
+            
             const result = await handleReviewSubmission(bookData, rating, reviewText);
+            
             if (result) {
                 hideReviewForm(popup);
-                // Mantener el estado de favoritos si existe
-                if (!favBtn.classList.contains('active')) {
+                
+                // Verificar si el libro ya está en favoritos
+                const isFavorite = bookStatus && bookStatus.favourite;
+                
+                // Si no está en favoritos, agregar a la lista de leídos
+                if (!isFavorite) {
                     await addToList(bookData, 'read');
-                    listBtn.textContent = 'En lista: read';
+                    
+                    // Actualizar el texto del botón de lista
+                    const listBtn = popup.querySelector('.list-btn');
+                    if (listBtn) {
+                        listBtn.textContent = 'En lista: read';
+                    }
                 }
             }
         } catch (error) {
@@ -742,7 +787,6 @@ async function loadReadingLists() {
 function findBookInLists(book) {
     if (!userLists) return null;
 
-    // Object to store the status and additional details
     const bookStatus = {
         id: null,
         status: null,
@@ -751,46 +795,40 @@ function findBookInLists(book) {
         review: null
     };
 
-    // Helper function to compare books
     const isSameBook = (listBook, searchBook) => {
         // Comparar por título y autor
         return listBook.title === searchBook.title && 
                listBook.author === (searchBook.author_name?.[0] || searchBook.author);
     };
 
-    // Check if book is in favourites list
-    if (userLists.favourites && Array.isArray(userLists.favourites)) {
-        const inFavorites = userLists.favourites.some(listBook => isSameBook(listBook, book));
-        if (inFavorites) {
-            bookStatus.favourite = true;
-        }
-    }
+    const statusLists = ['favourites', 'reading', 'to-read', 'read'];
 
-    // Arrays to check for reading status
-    const statusLists = ['reading', 'to-read', 'read'];
-
-    // Check each reading status list
     for (const listName of statusLists) {
         if (userLists[listName] && Array.isArray(userLists[listName])) {
             const foundBook = userLists[listName].find(listBook => isSameBook(listBook, book));
 
             if (foundBook) {
-                bookStatus.id = foundBook.id;
-                bookStatus.status = listName;
-                // Copy additional properties if they exist
+                // Si el libro está en la lista de favoritos
+                if (listName === 'favourites') {
+                    bookStatus.favourite = true;
+                } else {
+                    bookStatus.status = listName;
+                }
+                
+                // Asignar ID si está disponible
+                if (foundBook.id) {
+                    bookStatus.id = foundBook.id;
+                }
+                
+                // Copiar propiedades adicionales si existen
                 if (foundBook.rating) bookStatus.rating = foundBook.rating;
                 if (foundBook.review) bookStatus.review = foundBook.review;
-                break; // Exit loop once we find the book in a list
+                
+                break; 
             }
         }
     }
 
-    // Return null if no matches found in any list and book is not favorite
-    if (!bookStatus.status && !bookStatus.favourite) {
-        return null;
-    }
-
-    // Para debugging
     console.log('Found book status:', bookStatus);
     return bookStatus;
 }
