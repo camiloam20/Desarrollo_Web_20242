@@ -21,7 +21,7 @@ html, body {
     font-family: 'Poppins', sans-serif;
     overscroll-behavior: none;
     overflow-x: hidden;
-    min-height: 100vh;  /* Asegura que el cuerpo ocupe toda la altura de la ventana */
+    min-height: 100vh; 
     display: flex;
     flex-direction: column;
 }
@@ -32,7 +32,7 @@ main {
     color: var(--light);
     position: relative;
     z-index: 1;
-    flex: 1; /* Hace que el contenido ocupe el espacio restante */
+    flex: 1; 
 }
 
 main::after {
@@ -42,7 +42,7 @@ main::after {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5); /* Sombra oscura */
+    background: rgba(0, 0, 0, 0.5);
     z-index: 0;
 }
 
@@ -112,8 +112,8 @@ nav {
     font-weight: 500;
     font-size: 0.9em;
     text-decoration: none;
-    background: var(--dark); /* Fondo oscuro */
-    color: var(--light); /* Texto blanco */
+    background: var(--dark); 
+    color: var(--light); 
 }
 
 /* Otros botones */

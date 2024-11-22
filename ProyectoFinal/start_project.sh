@@ -10,8 +10,14 @@ docker system prune -a -f
 docker-compose up -d
 
 # Abrir las URLs en el navegador
+# Para WSL:
 cmd.exe /c start http://localhost:8080/ #URL de la aplicación frontend
 cmd.exe /c start "http://localhost:8081/?username=root" #URL de la base de datos con Adminer
+
+#Si es para Linux con xdg-utils instalado:
+#xdg-open http://localhost:8080/ # URL de la aplicación frontend
+#xdg-open "http://localhost:8081/?username=root" # URL de la base de datos con Adminer
+
 #Usar estas credenciales:
 #Sistema: MySQL
 #Servidor: db

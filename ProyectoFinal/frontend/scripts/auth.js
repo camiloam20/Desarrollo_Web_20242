@@ -1,3 +1,4 @@
+//frontend/scripts/auth.js
 function showPopup(type) {
   const overlay = document.createElement('div');
   overlay.classList.add('popup-overlay');
