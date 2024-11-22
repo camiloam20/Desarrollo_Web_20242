@@ -22,11 +22,10 @@ Como parte del proyecto final del curso Desarrollo de aplicaciones Web me gustar
 ## Características
 
 
-- **Explorar Libros**: Los usuarios pueden buscar libros por título, autor, o género.
-- **Organización Personalizada**: Los libros se pueden organizar en listas como “Leyendo”, “Leídos” y “Quiero Leer”.
+- **Explorar Libros**: Los usuarios pueden buscar libros por título, autor.
+- **Organización Personalizada**: Los libros se pueden organizar en listas como “Leyendo”, “Leídos” y “Quiero Leer” y guardar en favoritos.
 - **Reseñas y Puntuaciones**: Los usuarios pueden puntuar los libros y escribir reseñas.
-- **Estadísticas del Usuario**: Los usuarios pueden ver estadísticas basadas en su actividad de lectura.
-
+- **Administrador**: Hay un administrador que puede modificar la información de los usuarios, volver a un usuario común administrador o eliminarlo. Se puede tambien modificar los datos de los libros o eliminarlos.
   
 ## Tecnologías a usar
 
@@ -36,7 +35,7 @@ Como parte del proyecto final del curso Desarrollo de aplicaciones Web me gustar
 - **JavaScript (DOM)**: Lógica de la interacción y contenido dinámico tal como se ha aprendido en el curso.
 
 ### Servidor (Backend):
-- **Go/NodeJS/Java**: Desarrollo de la REST API para manejar las peticiones del cliente, almacenamiento y procesamiento de datos.
+- **NodeJS**: Desarrollo de la REST API para manejar las peticiones del cliente, almacenamiento y procesamiento de datos.
 - **SQLite/PostgreSQL**: Para la implementación y diseño de la base de datos.
 - **Docker**: Para el uso de contenedores y el despliegue de la aplicación.
 
